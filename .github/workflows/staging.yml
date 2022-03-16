@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: staging-deployment
 
 # Controls when the workflow will run
 on:
@@ -31,10 +31,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
-      # Get git commit id in short
       - name: Add SHORT_SHA env property with commit short sha
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-7`" >> $GITHUB_ENV
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
+      - name: Run ansible build and deploy
         run: ansible-playbook -l localhost config/ansible/playbook.yaml -vv
