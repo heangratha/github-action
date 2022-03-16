@@ -1,0 +1,25 @@
+---
+
+- name: Create Dockerfile
+  template:
+    src: 'Dockerfile.j2'
+    dest: '${GITHUB_WORKSPACE}/Dockerfile'
+    mode: 0755
+
+- name: Build docker image
+  shell: 'docker build -t rathaheang/mytest:latest .'
+  args:
+    chdir: '${GITHUB_WORKSPACE}'
+
+- name: Tag docker image
+  shell: 'docker tag rathaheang/mytest:latest rathaheang/mytest:${GITHUB_SHA::7}'
+  args:
+    chdir: '${GITHUB_WORKSPACE}'
+
+- name: Push docker image
+  shell: 'docker push rathaheang/mytest:{{ item }}'
+  args:
+    chdir: '${GITHUB_WORKSPACE}'
+  loop:
+    - '${GITHUB_SHA::7}'
+    - latest

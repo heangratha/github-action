@@ -1,0 +1,6 @@
+---
+
+- hosts: all
+  roles:
+    - role: build
+    - role: deploy
