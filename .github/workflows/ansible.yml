@@ -35,7 +35,7 @@ jobs:
       
       # Get git commit id in short
       - name: Add SHORT_SHA env property with commit short sha
-        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-7`" >> $GITHUB_ENV
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
