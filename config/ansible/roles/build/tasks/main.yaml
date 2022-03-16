@@ -12,7 +12,7 @@
     chdir: '${GITHUB_WORKSPACE}'
 
 - name: Tag docker image
-  shell: 'docker tag rathaheang/mytest:latest rathaheang/mytest:${GITHUB_SHA::7}'
+  shell: 'docker tag rathaheang/mytest:latest rathaheang/mytest:${SHORT_SHA}'
   args:
     chdir: '${GITHUB_WORKSPACE}'
 
@@ -21,5 +21,5 @@
   args:
     chdir: '${GITHUB_WORKSPACE}'
   loop:
-    - '${GITHUB_SHA::7}'
+    - '${SHORT_SHA}'
     - latest
