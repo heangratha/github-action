@@ -27,6 +27,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Check IP
+        run: curl https://api.ipify.org
+
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
