@@ -7,17 +7,17 @@
     mode: 0755
 
 - name: Build docker image
-  shell: 'docker build -t rathaheang/mytest:latest .'
+  shell: 'docker build -t 472771150659.dkr.ecr.ap-southeast-1.amazonaws.com/github:latest .'
   args:
     chdir: '${GITHUB_WORKSPACE}'
 
 - name: Tag docker image
-  shell: 'docker tag rathaheang/mytest:latest rathaheang/mytest:${SHORT_SHA}'
+  shell: 'docker tag 472771150659.dkr.ecr.ap-southeast-1.amazonaws.com/github:latest 472771150659.dkr.ecr.ap-southeast-1.amazonaws.com/github:${SHORT_SHA}'
   args:
     chdir: '${GITHUB_WORKSPACE}'
 
 - name: Push docker image
-  shell: 'docker push rathaheang/mytest:{{ item }}'
+  shell: 'docker push 472771150659.dkr.ecr.ap-southeast-1.amazonaws.com/github:{{ item }}'
   args:
     chdir: '${GITHUB_WORKSPACE}'
   loop:
