@@ -3,23 +3,31 @@
 - name: Create Dockerfile
   template:
     src: 'Dockerfile.j2'
-    dest: '${GITHUB_WORKSPACE}/Dockerfile'
+    dest: '{{ workspace }}/Dockerfile'
     mode: 0755
 
 - name: Build docker image
-  shell: 'docker build -t 472771150659.dkr.ecr.ap-southeast-1.amazonaws.com/github:latest .'
+  shell: 'docker build -t {{ aws_account_id }}.dkr.ecr.{{ aws_region }}.amazonaws.com/github:latest .'
   args:
-    chdir: '${GITHUB_WORKSPACE}'
+    chdir: '{{ workspace }}'
 
 - name: Tag docker image
-  shell: 'docker tag 472771150659.dkr.ecr.ap-southeast-1.amazonaws.com/github:latest 472771150659.dkr.ecr.ap-southeast-1.amazonaws.com/github:${SHORT_SHA}'
+  shell: 'docker tag {{ aws_account_id }}.dkr.ecr.{{ aws_region }}.amazonaws.com/github:latest {{ aws_account_id }}.dkr.ecr.{{ aws_region }}.amazonaws.com/github:{{ version }}'
   args:
-    chdir: '${GITHUB_WORKSPACE}'
+    chdir: '{{ workspace }}'
+
+- name: Login to ECR
+  shell: |
+    aws ecr get-login-password --region {{ aws_region }} \
+    | docker login \
+        --username AWS \
+        --password-stdin \
+        {{ aws_account_id }}.dkr.ecr.{{ aws_region }}.amazonaws.com
 
 - name: Push docker image
-  shell: 'docker push 472771150659.dkr.ecr.ap-southeast-1.amazonaws.com/github:{{ item }}'
+  shell: 'docker push {{ aws_account_id }}.dkr.ecr.{{ aws_region }}.amazonaws.com/github:{{ item }}'
   args:
-    chdir: '${GITHUB_WORKSPACE}'
+    chdir: '{{ workspace }}'
   loop:
-    - '${SHORT_SHA}'
+    - '{{ version }}'
     - latest
