@@ -14,9 +14,6 @@ jobs:
       contents: read
       id-token: write
 
-    container:
-      image: wehostasia/laravel:nginx-php-8.3
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -28,8 +25,20 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       
-      - name: Add SHORT_SHA env property with commit short sha
-        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-7`" >> $GITHUB_ENV
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, intl, pdo_mysql, zip, bcmath
+          coverage: none
+
+      - name: Validate PHP Version
+        run: |
+          php -v
+          composer --version
+
+      - name: Install Composer Dependencies
+        run: composer install
 
       - name: Run ansible build and deploy
         run: config/workflows/build.sh
