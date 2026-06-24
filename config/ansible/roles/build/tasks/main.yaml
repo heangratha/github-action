@@ -6,6 +6,11 @@
     dest: '{{ workspace }}/Dockerfile'
     mode: 0755
 
+- name: Composer install
+  shell: 'composer install'
+  args:
+    chdir: '{{ workspace }}'
+
 - name: Build docker image
   shell: 'docker build -t {{ aws_account_id }}.dkr.ecr.{{ aws_region }}.amazonaws.com/github:latest .'
   args:
